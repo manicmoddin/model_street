@@ -2,9 +2,11 @@ int tRed = D1;
 int tAmber = D2; 
 int tGreen = D3;
 int pButton = D4;
+int lightSensor = A0;
 
 int lightDelay = 1500;
 int pWantingToCross = 0;
+int lightLevel = 0;
 
 void redAmber() {
   digitalWrite(tRed, HIGH);
@@ -60,4 +62,8 @@ void loop(){
     pWantingToCross = 0;
   }
   green();
+  lightLevel = analogRead(lightSensor);
+  if (lightLevel <= 200) {
+    Serial.println("Lights on");
+  }
 }
