@@ -2,6 +2,7 @@ int tRed = D1;
 int tAmber = D2; 
 int tGreen = D3;
 int pButton = D4;
+int streetLight = D5;
 int lightSensor = A0;
 
 int lightDelay = 1500;
@@ -43,11 +44,15 @@ void setup() {
   pinMode(tRed,OUTPUT);   
   pinMode(tAmber,OUTPUT); 
   pinMode(tGreen,OUTPUT); 
+  pinMode(streetLight, OUTPUT);
   pinMode(pButton, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(pButton), wantingToCross, RISING);
 
   // Default to red being on
   red();
+
+  // Default to streetlights being off
+  digitalWrite(streetLight, LOW);
 }
 
 void loop(){
@@ -65,5 +70,10 @@ void loop(){
   lightLevel = analogRead(lightSensor);
   if (lightLevel <= 200) {
     Serial.println("Lights on");
+    digitalWrite(streetLight, HIGH);
+  }
+  else {
+    Serial.println("Lights Off");
+    digitalWrite(streetLight, LOW);
   }
 }
