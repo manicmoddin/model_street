@@ -1,3 +1,4 @@
+#include <Adafruit_NeoPixel.h>
 int tRed = D1;   
 int tAmber = D2; 
 int tGreen = D3;
@@ -11,6 +12,8 @@ int lightSensor = A0;
 int lightDelay = 1500;
 int pWantingToCross = 0;
 int lightLevel = 0;
+
+Adafruit_NeoPixel streetLights(4, streetLight, NEO_GRB + NEO_KHZ800);
 
 void redAmber() {
   digitalWrite(tRed, HIGH);
@@ -62,13 +65,16 @@ ICACHE_RAM_ATTR void wantingToCross() {
 
 void setup() {
   Serial.begin(115200);
+  streetLights.begin();
+  streetLights.fill(streetLights.Color(0,0,0));
+  streetLights.show(); // Initialize all pixels to 'off'
   pinMode(tRed,OUTPUT);   
   pinMode(tAmber,OUTPUT); 
   pinMode(tGreen,OUTPUT); 
   pinMode(pRed, OUTPUT);
   pinMode(pGreen, OUTPUT);
   pinMode(pWait, OUTPUT);
-  pinMode(streetLight, OUTPUT);
+  // pinMode(streetLight, OUTPUT);
   pinMode(pButton, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(pButton), wantingToCross, RISING);
 
@@ -99,11 +105,15 @@ void loop(){
   green();
   lightLevel = analogRead(lightSensor);
   if (lightLevel <= 200) {
-    //Serial.println("Lights on");
-    digitalWrite(streetLight, HIGH);
+    // Serial.println("Lights on");
+    streetLights.fill(streetLights.Color(255,255,255));
+    streetLights.show();
+
+    // digitalWrite(streetLight, HIGH);
   }
   else {
     //Serial.println("Lights Off");
-    digitalWrite(streetLight, LOW);
+    streetLights.fill(streetLights.Color(0,0,0));
+    streetLights.show();
   }
 }
